@@ -1,14 +1,9 @@
 import './App.css';
-import { Container } from 'react-bulma-components';
-import Input from './input.js'
-import Table from './table.js';
+import List from './list.js';
 
 function App() {
-  return (
-    <Container className="App">
-        <Input />
-        <Table />
-    </Container>
+    return (
+        <List />
   );
 }
 

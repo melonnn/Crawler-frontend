@@ -1,9 +1,70 @@
 import React from 'react';
 import 'bulma/css/bulma.min.css';
-import { Box, Table, Image } from 'react-bulma-components';
+import { Box, Table, Image, Button } from 'react-bulma-components';
 
 class table extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: []
+        }; 
+
+        this.showDetail=this.showDetail.bind(this);
+    }
+
+    getInfo() {
+        fetch("http://localhost:8000/api/crawler/getAll")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    items: result
+                });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+                this.setState({
+                    error
+                });
+            }
+        );
+    }
+
+    showDetail(e) {
+        let id = e.target.id;
+        this.props.detail(id);
+    }
+
+    componentDidMount() {
+        this.getInfo();
+    };
+
+    componentDidUpdate(prevProps) {
+        if (this.props.refresh != prevProps.refresh) {
+            this.getInfo();
+        }
+    }
+
     render() {
+        console.log(this.state.items);
+        let infos = this.state.items.map((item) =>
+            <tr>
+                <td>
+                    <a href={decodeURIComponent(item.url)} target="_blank" rel="noreferrer" >{item.title}</a>
+                </td>
+                <td>{decodeURIComponent(item.url)}</td>
+                <td>{item.description}</td>
+                <td>
+                    <Image size="4by3" src={decodeURIComponent(item.image)} />
+                </td>
+                <td>{item.created_at}</td>
+                <td>
+                    <Button color="info" id={item.id} onClick={this.showDetail.bind(this)} > See more </Button>
+                </td>
+            </tr>
+        );
         return (
             <Box mt='3'>
                 <Table size='fullwidth'>
@@ -26,19 +87,7 @@ class table extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <a href="http://www.google.com.tw/" target="_blank" >Google</a>
-                            </td>
-                            <td>http://www.google.com.tw/</td>
-                            <td>設定 · 你在Google 搜尋中的資料 · 隱藏含有煽情露骨內容的搜尋結果：關閉. 深色主題：關閉. 搜尋服務的運作方式 · 説明 提供意見. 全部圖片 · 登入. Google.
-                            </td>
-                            <td>
-                                <Image size="4by3" src="https://wallpapercave.com/wp/tU89SSy.jpg" />
-                            </td>
-                            <td>2022/6/28 19:25:43</td>
-                            <td><a>See more</a></td>
-                        </tr>
+                        {infos}
                     </tbody>
                 </Table>
             </Box>
