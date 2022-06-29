@@ -19,3 +19,12 @@ You may also see any lint errors in the console.
 
 ## Example
 
+Index
+![Index](https://github.com/melonnn/Crawler-frontend/blob/master/index.png)
+
+Crawler finish
+![Index](https://github.com/melonnn/Crawler-frontend/blob/master/add.png)
+
+
+Detail
+![Index](https://github.com/melonnn/Crawler-frontend/blob/master/detail.png)
